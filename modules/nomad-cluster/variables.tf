@@ -73,10 +73,17 @@ variable "custom_tags" {
   default     = []
 }
 
-variable "instance_group_update_strategy" {
-  description = "The update strategy to be used by the Instance Group. IMPORTANT! When you update almost any cluster setting, under the hood, this module creates a new Instance Group Template. Once that Instance Group Template is created, the value of this variable determines how the new Template will be rolled out across the Instance Group. Unfortunately, as of August 2017, Google only supports the options 'RESTART' (instantly restart all Compute Instances and launch new ones from the new Template) or 'NONE' (do nothing; updates should be handled manually). Google does offer a rolling updates feature that perfectly meets our needs, but this is in Alpha (https://goo.gl/MC3mfc). Therefore, until this module supports a built-in rolling update strategy, we recommend using `NONE` and either using the alpha rolling updates strategy to roll out new Vault versions, or to script this using GCE API calls. If using the alpha feature, be sure you are comfortable with the level of risk you are taking on. For additional detail, see https://goo.gl/hGH6dd."
-  type        = string
-  default     = "NONE"
+variable "instance_group_update_policy" {
+  default = null
+  type = object({
+    type                    = string
+    minimal_action          = string
+    max_surge_percent       = number
+    max_surge_fixed         = number
+    max_unavailable_fixed   = number
+    max_unavailable_percent = number
+    min_ready_sec           = number
+  })
 }
 
 # Metadata
