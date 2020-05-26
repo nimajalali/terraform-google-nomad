@@ -19,7 +19,7 @@ resource "google_compute_region_instance_group_manager" "nomad" {
   version {
     instance_template = data.template_file.compute_instance_template_self_link.rendered
   }
-  region               = var.gcp_region
+  region = var.gcp_region
 
   dynamic "update_policy" {
     for_each = var.instance_group_update_policy == null ? [] : list(var.instance_group_update_policy)
@@ -79,7 +79,8 @@ resource "google_compute_instance_template" "nomad_public" {
   }
 
   network_interface {
-    network = var.network_name
+    network    = var.network_name
+    subnetwork = var.subnetwork_name
     access_config {
       # The presence of this property assigns a public IP address to each Compute Instance. We intentionally leave it
       # blank so that an external IP address is selected automatically.
@@ -136,7 +137,8 @@ resource "google_compute_instance_template" "nomad_private" {
   }
 
   network_interface {
-    network = var.network_name
+    network    = var.network_name
+    subnetwork = var.subnetwork_name
   }
 
   # For a full list of oAuth 2.0 Scopes, see https://developers.google.com/identity/protocols/googlescopes
@@ -168,11 +170,11 @@ module "firewall_rules" {
   network_name = var.network_name
 
   allowed_inbound_cidr_blocks_http = var.allowed_inbound_cidr_blocks_http
-  allowed_inbound_cidr_blocks_rpc = var.allowed_inbound_cidr_blocks_rpc
+  allowed_inbound_cidr_blocks_rpc  = var.allowed_inbound_cidr_blocks_rpc
   allowed_inbound_cidr_blocks_serf = var.allowed_inbound_cidr_blocks_serf
 
   allowed_inbound_tags_http = var.allowed_inbound_tags_http
-  allowed_inbound_tags_rpc = var.allowed_inbound_tags_rpc
+  allowed_inbound_tags_rpc  = var.allowed_inbound_tags_rpc
   allowed_inbound_tags_serf = var.allowed_inbound_tags_serf
 
   http_port = 4646
