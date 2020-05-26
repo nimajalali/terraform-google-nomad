@@ -164,6 +164,8 @@ module "firewall_rules" {
 
   cluster_name     = var.cluster_name
   cluster_tag_name = var.cluster_tag_name
+  
+  network_name = var.network_name
 
   allowed_inbound_cidr_blocks_http = var.allowed_inbound_cidr_blocks_http
   allowed_inbound_cidr_blocks_rpc = var.allowed_inbound_cidr_blocks_rpc
